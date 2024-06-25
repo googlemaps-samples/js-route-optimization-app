@@ -26,6 +26,7 @@ import { selectMouseOverId } from './ui.selectors';
 import RoutesMetadataSelectors from './routes-metadata.selectors';
 import * as fromUI from './ui.selectors';
 import ShipmentRouteSelectors from './shipment-route.selectors';
+import { selectVisitRequestStopOrder } from './shipment-route.selectors';
 
 export const selectVisitRequests = createSelector(
   fromVisitRequest.selectAll,
@@ -118,6 +119,16 @@ export const selectFilteredVisitRequests = createSelector(
     });
   }
 );
+
+export const selectFilteredVisitRequestsWithStopOrder = createSelector(
+  selectFilteredVisitRequests,
+  selectVisitRequestStopOrder,
+  (visitRequests, stopOrder) => {
+    const visitRequestsWithOrder = {};
+    visitRequests.forEach(vr => visitRequestsWithOrder[vr.id] = {...vr, stopOrder: stopOrder[vr.id]});
+    return visitRequestsWithOrder;
+  }
+)
 
 export const selectFilteredVisitRequestsSelected = createSelector(
   selectFilteredRouteVisitRequestsSelected,
